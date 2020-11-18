@@ -109,7 +109,6 @@ const App = () => {
     <div>
       <Navbar/>
       {condicion && <Releases /> }
-      <Artist/>
       
       {/* <form onSubmit={buttonClicked}>
           <Dropdown label="Genero :" options={genres.listOfGenresFromAPI} selectedValue={genres.selectedGenre} changed={genreChanged} />

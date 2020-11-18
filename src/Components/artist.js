@@ -7,14 +7,16 @@ import Detailartist from './Detailartist';
 import axios from 'axios';
 
 
-const Artist = () => {
+const Artist = (props) => {
 
     const spotify = Credentials();
     const [token, setToken] = useState('');
     const [searches, setSearches] = useState({ selectedSearch: '', listOfSearchesFromAPI: [] });
     const [searchDetail, setSearchDetail] = useState(null);
+    const [please, setPlease] = useState(props);
 
-
+    // { props.join('') } 
+    console.log(props);
     useEffect(() => {
 
         axios('https://accounts.spotify.com/api/token', {
@@ -27,7 +29,7 @@ const Artist = () => {
         }) //Llamada a la api para obtener el token
            .then(tokenResponse => {
                 setToken(tokenResponse.data.access_token);
-               axios('https://api.spotify.com/v1/search?q=andres&type=artist&offset=0&limit=12', {
+               axios(`https://api.spotify.com/v1/search?q=andres&type=artist&offset=0&limit=12`, {
                     method: 'GET',
                     headers: { 'Authorization': 'Bearer ' + tokenResponse.data.access_token }
                 }) //Se obtienen LA search
@@ -41,9 +43,7 @@ const Artist = () => {
             });
             
         }, [searches.selectedSearch, spotify.ClientId, spotify.ClientSecret]);
-    console.log(searches.listOfSearchesFromAPI);
         return (
-            
             <div className="container-fluid">
             <h2 css={[title]}>Artistas Encontrado</h2>
             <div className="row justify-content-end">

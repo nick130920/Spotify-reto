@@ -3,6 +3,7 @@
 import React, { useState, useEffect, forwardRef } from 'react'
 import { css, jsx } from '@emotion/core'
 import spotifyLogo from '../img/spotify-logo.png'
+import Artist from '../Components/artist';
 import Icon from './Icon'
 
 import Form from 'react-bootstrap/Form';
@@ -11,35 +12,48 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 /**
  * @function Navbar
  */
-const Navbar = forwardRef((props, ref) => {
-    const [scrolled, setScrolled] = useState(false)
-    useEffect(() => {
-        const handleScroll = () =>
-            window.pageYOffset > 75 ? setScrolled(true) : setScrolled(false)
-
-        const onScroll = window.addEventListener('scroll', handleScroll)
-
-        return () => {
-            window.removeEventListener('scroll', onScroll)
-        }
-    }, [])
-
+class Navbar extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {value: ''}
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  handleChange = (event) => {
+    this.setState({ value: event.target.value });
+    
+  }
+  handleSubmit(event) {
+    alert('A name was submitted: ' + this.state.value);
+    event.preventDefault();
+  }
+  render(){
+    const { name } = this.state;
     return (
-        <nav ref={ref} css={[NavbarCSS]}>
-                <img className="navbar-brand" height="39.5" src={spotifyLogo} />
-            <ul>
-                <li>
-                    <i css={[BuscarCSS]} className={`busqueda Icon fa fa-search`}></i>
-                    <Form.Control css={[InputCSS]} value={this.state.value} onChange={this.handleChange} type="text" placeholder="Buscar Artista"/>
-                </li>
-                <li>
-                    <i css={[BuscarCSS]} className={`busqueda Icon fa fa-search`}></i>
-                    <Form.Control css={[InputCSS]} type="text" placeholder="Buscar Canción" />
-                </li>
-            </ul>
+      <div>
+        <nav css={[NavbarCSS]}>
+          <img className="navbar-brand" height="39.5" src={spotifyLogo} />
+          <ul>
+            <Form onSubmit={this.handleSubmit}>
+            <li>
+              <i css={[BuscarCSS]} className={`busqueda Icon fa fa-search`}></i>
+              <Form.Control value={this.state.value}
+                onChange={this.handleChange} css={[InputCSS]} type="text" placeholder="Buscar Artista" />
+              <Form.Control type="submit" css={css`display: none;`}  />
+            </li>
+            </Form>
+            <li>
+              <i css={[BuscarCSS]} className={`busqueda Icon fa fa-search`}></i>
+              <Form.Control css={[InputCSS]} type="text" placeholder="Buscar Canción" />
+            </li>
+          </ul>
+
         </nav>
-    )
-});
+        {this.state.value && <Artist {...this.state.value} />}
+      </div>
+    );
+  }
+}
 const BuscarCSS = css`
   position: relative;
   top: 2rem;
